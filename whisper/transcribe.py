@@ -103,7 +103,8 @@ def transcribe(
     def decode_with_fallback(segment: torch.Tensor) -> DecodingResult:
         temperatures = [temperature] if isinstance(temperature, (int, float)) else temperature
         decode_result = None
-
+        _, probs = model.detect_language(segment)
+        decode_options["language"] = max(probs, key=probs.get)
         for t in temperatures:
             kwargs = {**decode_options}
             if t > 0:
