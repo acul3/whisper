@@ -149,6 +149,7 @@ def transcribe(
     def add_segment(
         *, start: float, end: float, text_tokens: torch.Tensor, result: DecodingResult
     ):
+        tokenizer = get_tokenizer(model.is_multilingual, language=result.language, task=task)
         text = tokenizer.decode([token for token in text_tokens if token < tokenizer.eot])
         if len(text.strip()) == 0:  # skip empty text output
             return
